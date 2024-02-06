@@ -1,6 +1,5 @@
 using Unity.Netcode;
 using UnityEngine;
-using UnityEngine.Animations.Rigging;
 
 public class InputHandler : MonoBehaviour
 {
@@ -12,12 +11,14 @@ public class InputHandler : MonoBehaviour
 
     private PlayerInputs _PlayerInputs;
     private CharacterControllerMotor _CharacterMotor;
+    private CharacterRotor _CharacterRotor;
 
     #endregion
 
     private void Awake(){
         _PlayerInputs = new PlayerInputs();
         _CharacterMotor = GetComponent<CharacterControllerMotor>();
+        _CharacterRotor = GetComponent<CharacterRotor>();
     }
 
     private void OnEnable() {
@@ -27,6 +28,9 @@ public class InputHandler : MonoBehaviour
 
         _PlayerInputs.Gameplay.Movement.performed += ctx => _CharacterMotor.MovementInput = ctx.ReadValue<Vector2>();
         _PlayerInputs.Gameplay.Movement.canceled += ctx => _CharacterMotor.MovementInput = Vector2.zero;
+
+        _PlayerInputs.Gameplay.MouseDelta.performed += ctx => _CharacterRotor.MouseDelta = ctx.ReadValue<Vector2>();
+        _PlayerInputs.Gameplay.MouseDelta.canceled += ctx => _CharacterRotor.MouseDelta = Vector2.zero;
     }
 
     private void OnDisable() {

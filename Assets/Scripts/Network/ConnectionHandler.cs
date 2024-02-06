@@ -12,6 +12,8 @@ public class ConnectionHandler : MonoBehaviour
 
     #region Private Variables
 
+    [SerializeField] private Camera preConnectionCam;
+
     [SerializeField] private GameObject buttonHolder;
     [SerializeField] private TextMeshProUGUI connectionMode;
 
@@ -32,6 +34,7 @@ public class ConnectionHandler : MonoBehaviour
 
     private void OnConnection() {
         buttonHolder.SetActive(false);
+        preConnectionCam.enabled = false;
 
         string connectionType = NetworkManager.Singleton.IsHost ? "Connection Mode: Host" : NetworkManager.Singleton.IsServer ? "Connection Mode: Server" : "Connection Mode: Client";
         connectionMode.text = $"Transport Mode: {NetworkManager.Singleton.NetworkConfig.NetworkTransport.GetType().Name} \n Mode: {connectionType}";
