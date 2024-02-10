@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -31,14 +29,14 @@ public class CharacterControllerMotor : NetworkBehaviour
     private void Update() {
         if(!IsOwner) return;
 
-        if(MovementInput.magnitude > 0)
+        if(MovementInput.magnitude > 0){
             PlayerMovementServerRpc(Time.deltaTime);
+        }
     }
 
     [ServerRpc]
     private void PlayerMovementServerRpc(float clientDeltaTime)
     {
-
         Vector3 forwardMovement = MovementInput.y * Speed * clientDeltaTime * transform.forward;
         Vector3 rightMovement = MovementInput.x * Speed * clientDeltaTime * transform.right;
         _CharacterController.Move(forwardMovement + rightMovement);

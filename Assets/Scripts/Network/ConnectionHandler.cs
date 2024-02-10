@@ -13,7 +13,6 @@ public class ConnectionHandler : MonoBehaviour
     #region Private Variables
 
     [SerializeField] private Camera preConnectionCam;
-
     [SerializeField] private GameObject buttonHolder;
     [SerializeField] private TextMeshProUGUI connectionMode;
 
