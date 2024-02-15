@@ -120,6 +120,54 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
             ""id"": ""f8123a37-5719-4b32-a9bf-b12741886983"",
             ""actions"": [],
             ""bindings"": []
+        },
+        {
+            ""name"": ""GlobalActions"",
+            ""id"": ""558e55a1-fc84-419f-a136-3616f13c4763"",
+            ""actions"": [
+                {
+                    ""name"": ""MenuToggle"",
+                    ""type"": ""Button"",
+                    ""id"": ""c75b5b9a-48ec-4f41-8f4f-e0979dd97b30"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""DevConsole"",
+                    ""type"": ""Button"",
+                    ""id"": ""c05d4491-f61c-4764-a2a3-f833a02f2218"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""929f78c5-7592-47ca-a184-e7b17db9d097"",
+                    ""path"": ""<Keyboard>/tab"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""MenuToggle"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""67b13f6f-6b89-45ca-b98f-fe17584ba09b"",
+                    ""path"": ""<Keyboard>/backquote"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""DevConsole"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": []
@@ -130,6 +178,10 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
         m_Gameplay_MouseDelta = m_Gameplay.FindAction("MouseDelta", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
+        // GlobalActions
+        m_GlobalActions = asset.FindActionMap("GlobalActions", throwIfNotFound: true);
+        m_GlobalActions_MenuToggle = m_GlobalActions.FindAction("MenuToggle", throwIfNotFound: true);
+        m_GlobalActions_DevConsole = m_GlobalActions.FindAction("DevConsole", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -279,6 +331,60 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
         }
     }
     public UIActions @UI => new UIActions(this);
+
+    // GlobalActions
+    private readonly InputActionMap m_GlobalActions;
+    private List<IGlobalActionsActions> m_GlobalActionsActionsCallbackInterfaces = new List<IGlobalActionsActions>();
+    private readonly InputAction m_GlobalActions_MenuToggle;
+    private readonly InputAction m_GlobalActions_DevConsole;
+    public struct GlobalActionsActions
+    {
+        private @PlayerInputs m_Wrapper;
+        public GlobalActionsActions(@PlayerInputs wrapper) { m_Wrapper = wrapper; }
+        public InputAction @MenuToggle => m_Wrapper.m_GlobalActions_MenuToggle;
+        public InputAction @DevConsole => m_Wrapper.m_GlobalActions_DevConsole;
+        public InputActionMap Get() { return m_Wrapper.m_GlobalActions; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(GlobalActionsActions set) { return set.Get(); }
+        public void AddCallbacks(IGlobalActionsActions instance)
+        {
+            if (instance == null || m_Wrapper.m_GlobalActionsActionsCallbackInterfaces.Contains(instance)) return;
+            m_Wrapper.m_GlobalActionsActionsCallbackInterfaces.Add(instance);
+            @MenuToggle.started += instance.OnMenuToggle;
+            @MenuToggle.performed += instance.OnMenuToggle;
+            @MenuToggle.canceled += instance.OnMenuToggle;
+            @DevConsole.started += instance.OnDevConsole;
+            @DevConsole.performed += instance.OnDevConsole;
+            @DevConsole.canceled += instance.OnDevConsole;
+        }
+
+        private void UnregisterCallbacks(IGlobalActionsActions instance)
+        {
+            @MenuToggle.started -= instance.OnMenuToggle;
+            @MenuToggle.performed -= instance.OnMenuToggle;
+            @MenuToggle.canceled -= instance.OnMenuToggle;
+            @DevConsole.started -= instance.OnDevConsole;
+            @DevConsole.performed -= instance.OnDevConsole;
+            @DevConsole.canceled -= instance.OnDevConsole;
+        }
+
+        public void RemoveCallbacks(IGlobalActionsActions instance)
+        {
+            if (m_Wrapper.m_GlobalActionsActionsCallbackInterfaces.Remove(instance))
+                UnregisterCallbacks(instance);
+        }
+
+        public void SetCallbacks(IGlobalActionsActions instance)
+        {
+            foreach (var item in m_Wrapper.m_GlobalActionsActionsCallbackInterfaces)
+                UnregisterCallbacks(item);
+            m_Wrapper.m_GlobalActionsActionsCallbackInterfaces.Clear();
+            AddCallbacks(instance);
+        }
+    }
+    public GlobalActionsActions @GlobalActions => new GlobalActionsActions(this);
     public interface IGameplayActions
     {
         void OnMovement(InputAction.CallbackContext context);
@@ -286,5 +392,10 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
     }
     public interface IUIActions
     {
+    }
+    public interface IGlobalActionsActions
+    {
+        void OnMenuToggle(InputAction.CallbackContext context);
+        void OnDevConsole(InputAction.CallbackContext context);
     }
 }

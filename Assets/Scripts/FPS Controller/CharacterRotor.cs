@@ -19,11 +19,6 @@ public class CharacterRotor : NetworkBehaviour
         }
     }
 
-    public override void OnNetworkSpawn()
-    {
-        Cursor.lockState = CursorLockMode.Locked;
-    }
-
     private void Update() {
         SyncRotationToNetwork();
 

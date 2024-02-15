@@ -16,12 +16,10 @@ public class PlayerNetworkInitaliser : NetworkBehaviour
 
     public override void OnNetworkSpawn(){
         if(IsOwner){
-            localVisuals.SetActive(true);
-            clientVisuals.SetActive(false);
+            Destroy(clientVisuals);
         }
         else{
-            localVisuals.SetActive(false);
-            clientVisuals.SetActive(true);
+            Destroy(localVisuals);
         }
     }
 
