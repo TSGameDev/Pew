@@ -12,6 +12,7 @@ public class InputHandler : MonoBehaviour
     private PlayerInputs _PlayerInputs;
     private CharacterControllerMotor _CharacterMotor;
     private CharacterRotor _CharacterRotor;
+    private WeaponController _WeaponController;
 
     private bool _MenuActive;
 
@@ -21,6 +22,7 @@ public class InputHandler : MonoBehaviour
         _PlayerInputs = new PlayerInputs();
         _CharacterMotor = GetComponent<CharacterControllerMotor>();
         _CharacterRotor = GetComponent<CharacterRotor>();
+        _WeaponController = GetComponentInChildren<WeaponController>();
     }
 
     private void OnEnable() {
@@ -34,6 +36,9 @@ public class InputHandler : MonoBehaviour
 
         _PlayerInputs.Gameplay.MouseDelta.performed += ctx => _CharacterRotor.MouseDelta = ctx.ReadValue<Vector2>();
         _PlayerInputs.Gameplay.MouseDelta.canceled += ctx => _CharacterRotor.MouseDelta = Vector2.zero;
+
+        _PlayerInputs.Gameplay.LeftMouseClick.performed += ctx => _WeaponController.FireCurrentWeapon();
+        _PlayerInputs.Gameplay.Reload.performed += ctx => _WeaponController.ReloadCurrentWeapon();
 
         _PlayerInputs.GlobalActions.DevConsole.performed += ctx => DevConsole.Instance.ToggleConsole();
 

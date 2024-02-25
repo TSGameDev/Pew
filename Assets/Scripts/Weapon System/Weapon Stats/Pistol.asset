@@ -12,11 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 340d5913161942345af3a095a69e8d5b, type: 3}
   m_Name: Pistol
   m_EditorClassIdentifier: 
-  _WeaponData:
+  weaponData:
     weaponName: Pistol
     fireMode: 1
-    magazineSize: 12
-    maxAmmo: 24
+    magazineSize: 8
+    magazineAmmo: 8
+    stockpileSize: 16
+    stockpileAmmo: 16
     damage: 1
     headShotMultiplier: 1.35
     weakShotMultiplier: 0.75

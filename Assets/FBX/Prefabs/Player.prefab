@@ -2014,6 +2014,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 958373455953774224}
+  - component: {fileID: 5628716552569861244}
   m_Layer: 0
   m_Name: Local Visual
   m_TagString: Untagged
@@ -2038,6 +2039,19 @@ Transform:
   - {fileID: 7668421352299825527}
   m_Father: {fileID: 5068797016242436323}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5628716552569861244
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7027117796226232268}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 27208a35ad56fda4899d0e7f54fe7358, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CurrentWeapon: {fileID: 3070724229992570159}
 --- !u!1 &7124235848393083989
 GameObject:
   m_ObjectHideFlags: 0
@@ -3931,7 +3945,11 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 7722809037033856531}
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 1347901682671290, guid: b017a00e018b1bc4f9ef2a84e5644a92,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3070724229992570159}
   m_SourcePrefab: {fileID: 100100000, guid: b017a00e018b1bc4f9ef2a84e5644a92, type: 3}
 --- !u!4 &5558169672086717562 stripped
 Transform:
@@ -3939,6 +3957,25 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 5562983043914959400}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &5564028504735896722 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1347901682671290, guid: b017a00e018b1bc4f9ef2a84e5644a92,
+    type: 3}
+  m_PrefabInstance: {fileID: 5562983043914959400}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &3070724229992570159
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5564028504735896722}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a927205b24e46e54f87ab0b4527da687, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  weaponData: {fileID: 11400000, guid: 7da64bd53f17a5b43a6b2363cee1a488, type: 2}
 --- !u!1001 &7672898884017341941
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -44,6 +44,33 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""LeftMouseClick"",
+                    ""type"": ""Button"",
+                    ""id"": ""0cad7838-c176-4724-9f39-f19de001cd84"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""RightMouseClick"",
+                    ""type"": ""Button"",
+                    ""id"": ""1baf36bc-ea99-4575-9ff5-32b4fc01472e"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Reload"",
+                    ""type"": ""Button"",
+                    ""id"": ""a25e8184-d2f1-40e4-ba80-0672e7efd384"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -112,6 +139,39 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
                     ""action"": ""MouseDelta"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""2f51287c-4568-40aa-8ef9-e8e0479c028f"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""LeftMouseClick"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""225836a8-1ed0-4e09-8d6a-234402739798"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""RightMouseClick"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""8a472ae3-46ee-4666-ab02-0ed336fa55c6"",
+                    ""path"": ""<Keyboard>/r"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Reload"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -176,6 +236,9 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
         m_Gameplay = asset.FindActionMap("Gameplay", throwIfNotFound: true);
         m_Gameplay_Movement = m_Gameplay.FindAction("Movement", throwIfNotFound: true);
         m_Gameplay_MouseDelta = m_Gameplay.FindAction("MouseDelta", throwIfNotFound: true);
+        m_Gameplay_LeftMouseClick = m_Gameplay.FindAction("LeftMouseClick", throwIfNotFound: true);
+        m_Gameplay_RightMouseClick = m_Gameplay.FindAction("RightMouseClick", throwIfNotFound: true);
+        m_Gameplay_Reload = m_Gameplay.FindAction("Reload", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         // GlobalActions
@@ -245,12 +308,18 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
     private List<IGameplayActions> m_GameplayActionsCallbackInterfaces = new List<IGameplayActions>();
     private readonly InputAction m_Gameplay_Movement;
     private readonly InputAction m_Gameplay_MouseDelta;
+    private readonly InputAction m_Gameplay_LeftMouseClick;
+    private readonly InputAction m_Gameplay_RightMouseClick;
+    private readonly InputAction m_Gameplay_Reload;
     public struct GameplayActions
     {
         private @PlayerInputs m_Wrapper;
         public GameplayActions(@PlayerInputs wrapper) { m_Wrapper = wrapper; }
         public InputAction @Movement => m_Wrapper.m_Gameplay_Movement;
         public InputAction @MouseDelta => m_Wrapper.m_Gameplay_MouseDelta;
+        public InputAction @LeftMouseClick => m_Wrapper.m_Gameplay_LeftMouseClick;
+        public InputAction @RightMouseClick => m_Wrapper.m_Gameplay_RightMouseClick;
+        public InputAction @Reload => m_Wrapper.m_Gameplay_Reload;
         public InputActionMap Get() { return m_Wrapper.m_Gameplay; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -266,6 +335,15 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
             @MouseDelta.started += instance.OnMouseDelta;
             @MouseDelta.performed += instance.OnMouseDelta;
             @MouseDelta.canceled += instance.OnMouseDelta;
+            @LeftMouseClick.started += instance.OnLeftMouseClick;
+            @LeftMouseClick.performed += instance.OnLeftMouseClick;
+            @LeftMouseClick.canceled += instance.OnLeftMouseClick;
+            @RightMouseClick.started += instance.OnRightMouseClick;
+            @RightMouseClick.performed += instance.OnRightMouseClick;
+            @RightMouseClick.canceled += instance.OnRightMouseClick;
+            @Reload.started += instance.OnReload;
+            @Reload.performed += instance.OnReload;
+            @Reload.canceled += instance.OnReload;
         }
 
         private void UnregisterCallbacks(IGameplayActions instance)
@@ -276,6 +354,15 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
             @MouseDelta.started -= instance.OnMouseDelta;
             @MouseDelta.performed -= instance.OnMouseDelta;
             @MouseDelta.canceled -= instance.OnMouseDelta;
+            @LeftMouseClick.started -= instance.OnLeftMouseClick;
+            @LeftMouseClick.performed -= instance.OnLeftMouseClick;
+            @LeftMouseClick.canceled -= instance.OnLeftMouseClick;
+            @RightMouseClick.started -= instance.OnRightMouseClick;
+            @RightMouseClick.performed -= instance.OnRightMouseClick;
+            @RightMouseClick.canceled -= instance.OnRightMouseClick;
+            @Reload.started -= instance.OnReload;
+            @Reload.performed -= instance.OnReload;
+            @Reload.canceled -= instance.OnReload;
         }
 
         public void RemoveCallbacks(IGameplayActions instance)
@@ -389,6 +476,9 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
     {
         void OnMovement(InputAction.CallbackContext context);
         void OnMouseDelta(InputAction.CallbackContext context);
+        void OnLeftMouseClick(InputAction.CallbackContext context);
+        void OnRightMouseClick(InputAction.CallbackContext context);
+        void OnReload(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {

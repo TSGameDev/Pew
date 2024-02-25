@@ -2,19 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class IWeapon : MonoBehaviour
+public interface IWeapon
 {
-    #region Public Variables
+    public WeaponData WeaponDataInstance { get;  set; }
 
-    #endregion
-
-    #region Private Variables
-
-    #endregion
-
-    void Awake()
-    {
-        
-    }
-
+    public void Fire();
+    public void Reload();
 }
