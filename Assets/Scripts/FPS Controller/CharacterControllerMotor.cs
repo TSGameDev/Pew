@@ -31,7 +31,6 @@ public class CharacterControllerMotor : NetworkBehaviour
 
         if(MovementInput.magnitude > 0){
             PlayerMovementServerRpc(Time.deltaTime);
-            DevConsole.Instance.DisplayDebug($"This is a test message {MovementInput.magnitude}");
         }
     }
 

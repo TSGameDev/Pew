@@ -56,5 +56,5 @@
         "temp/": true,
         "Temp/": true
     },
-    "dotnet.defaultSolution": "Pew.sln"
+    "dotnet.defaultSolution": "PAC.sln"
 }

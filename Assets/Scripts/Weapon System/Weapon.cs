@@ -1,44 +1,46 @@
 using System;
 using UnityEngine;
-using UnityEngine.InputSystem;
+using Sirenix.OdinInspector;
+using Unity.Netcode;
 
 [Serializable]
 public class Weapon : MonoBehaviour, IWeapon
 {
-
-    #region Public Variables
-
+    [Title("Shotting Settings")]
     [SerializeField] private WeaponStatsBase weaponData;
-
-    WeaponData IWeapon.WeaponDataInstance { get => _WeaponDataInstance; set => _WeaponDataInstance = value; }
-    #endregion
-
-    #region Private Variables
-
+    
     private WeaponData _WeaponDataInstance;
+    private float _CurrentShotTimer = 0f;
 
-    private float currentShotTimer = 0f;
-    #endregion
+    [Space(10)]
+    [Title("SFX Settings")]
+    [SerializeField] private GameObject bulletHolePlane;
+    [SerializeField] private ParticleSystem bulletVFX;
+    [SerializeField] private AudioClip bulletSFX;
+
+    private AudioSource _WeaponAudioSource;
 
     private void Start(){
+        _WeaponAudioSource = GetComponent<AudioSource>();
+
         _WeaponDataInstance = new WeaponData(weaponData);
     }
 
     private void Update(){
-        if (currentShotTimer > 0)
+        if (_CurrentShotTimer > 0)
         {
-            currentShotTimer -= 1 * Time.deltaTime;
+            _CurrentShotTimer -= 1 * Time.deltaTime;
         }
     }
 
     public void Fire(){
-        if (_WeaponDataInstance.magazineAmmo > 0 && currentShotTimer <= 0)
+        if (_WeaponDataInstance.magazineAmmo > 0 && _CurrentShotTimer <= 0)
         {
             _WeaponDataInstance.magazineAmmo--;
-            currentShotTimer = _WeaponDataInstance.timeBetweenShots;
+            _CurrentShotTimer = _WeaponDataInstance.timeBetweenShots;
             Debug.Log($"Weapon Fired! \n Mag Ammo: {_WeaponDataInstance.magazineAmmo}");
         }
-        else if (currentShotTimer <= 0)
+        else if (_CurrentShotTimer <= 0)
         {
             Debug.Log("Weapon Out Of Ammo! RELOADING!");
             Reload();
@@ -50,5 +52,10 @@ public class Weapon : MonoBehaviour, IWeapon
         _WeaponDataInstance.magazineAmmo = _WeaponDataInstance.magazineSize;
         Debug.Log($"Weapon Reloaded! \n Mag Ammo: {_WeaponDataInstance.magazineAmmo} \n Stockpile Ammo: {_WeaponDataInstance.stockpileAmmo} " +
             $"\n  Mag Size: {_WeaponDataInstance.magazineSize} \n Stockpile Size: {_WeaponDataInstance.stockpileSize}");
+    }
+
+    [ServerRpc]
+    private void Fire_ServerRPC(){
+        
     }
 }
